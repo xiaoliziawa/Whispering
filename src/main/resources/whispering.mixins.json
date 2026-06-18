@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"package": "com.lirxowo.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"LivingEntityParalysisMixin",
+		"LivingEntityTotemMixin",
+		"LivingEntityHurtMixin",
+		"PlayerFallMixin",
+		"AbstractArrowMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
