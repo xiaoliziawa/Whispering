@@ -9,9 +9,9 @@ import net.minecraft.world.phys.Vec3;
 public final class PioneerCoreClient {
 
     private static final double VERTICAL_ACCELERATION = 0.16D;
-    private static final double MAX_VERTICAL_SPEED = 0.7D;
-    private static final double FORWARD_ACCELERATION = 0.18D;
-    private static final double MAX_HORIZONTAL_SPEED = 0.85D;
+    private static final double MAX_VERTICAL_SPEED = 0.35D;
+    private static final double FORWARD_ACCELERATION = 0.12D;
+    private static final double MAX_HORIZONTAL_SPEED = 0.6D;
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(PioneerCoreClient::onClientTick);

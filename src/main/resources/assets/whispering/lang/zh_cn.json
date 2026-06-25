@@ -64,6 +64,7 @@
 	"item.whispering.abyssal_heart.tooltip.immune": "§7有 8% 概率免疫受到的伤害",
 	"item.whispering.abyssal_heart.tooltip.projectile": "§7受到的弹射物伤害减少 20%",
 	"item.whispering.abyssal_heart.tooltip.frenzy": "§7击杀敌人叠加杀人书：全法术属性 +2%/层，最多 10 层，持续 10 秒",
+	"effect.whispering.killing_frenzy": "杀人书",
 	"item.whispering.soul_grasp_ring": "攫灵戒",
 	"item.whispering.soul_grasp_ring.tooltip.drop": "§7击杀亡灵生物有 10% 概率掉落木棍",
 	"item.whispering.soul_grasp_ring.tooltip.nightvision": "§7获得夜视",

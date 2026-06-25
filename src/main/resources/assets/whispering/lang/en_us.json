@@ -64,6 +64,7 @@
 	"item.whispering.abyssal_heart.tooltip.immune": "§78% chance to negate incoming damage",
 	"item.whispering.abyssal_heart.tooltip.projectile": "§7Projectile damage taken reduced by 20%",
 	"item.whispering.abyssal_heart.tooltip.frenzy": "§7Kills stack Killing Frenzy: all spell attributes +2% per stack, up to 10 stacks, lasts 10s",
+	"effect.whispering.killing_frenzy": "Killing Frenzy",
 	"item.whispering.soul_grasp_ring": "Soul Grasp Ring",
 	"item.whispering.soul_grasp_ring.tooltip.drop": "§7Killing undead has a 10% chance to drop a stick",
 	"item.whispering.soul_grasp_ring.tooltip.nightvision": "§7Grants Night Vision",

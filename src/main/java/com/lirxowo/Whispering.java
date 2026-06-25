@@ -1,5 +1,6 @@
 package com.lirxowo;
 
+import com.lirxowo.effect.ModEffects;
 import com.lirxowo.event.WPEvents;
 import com.lirxowo.item.reg.AllCurios;
 import com.lirxowo.network.Network;
@@ -15,6 +16,7 @@ public class Whispering implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModEffects.init();
 		AllCurios.init();
 		Network.registerServerReceivers();
 		WPEvents.register();
