@@ -24,7 +24,7 @@ public class PioneerCoreItem extends AccessoryItem {
     private static final ResourceLocation DAMAGE_MODIFIER_ID = new ResourceLocation(Whispering.MOD_ID, "pioneer_core");
     private static final double DAMAGE_BONUS = 0.10D;
 
-    public static final int FUEL_DRAIN_INTERVAL_TICKS = 20;
+    public static final int FUEL_DRAIN_INTERVAL_TICKS = 240;
 
     public PioneerCoreItem(Properties properties) {
         super(properties);

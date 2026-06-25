@@ -26,6 +26,7 @@ public class FurnaceCoreItem extends AccessoryItem {
     private static final double DAMAGE_BONUS = 0.10D;
 
     private static final int INTERVAL_TICKS = 20;
+    private static final int FUEL_CONSUME_INTERVAL_TICKS = 240;
     private static final int BUFF_DURATION_TICKS = 60;
     private static final int FULL_FOOD_LEVEL = 20;
     private static final float REFILL_SATURATION = 6.0F;
@@ -61,6 +62,9 @@ public class FurnaceCoreItem extends AccessoryItem {
         player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, BUFF_DURATION_TICKS, 1, false, true));
         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, BUFF_DURATION_TICKS, 1, false, true));
 
+        if (player.tickCount % FUEL_CONSUME_INTERVAL_TICKS != 0) {
+            return;
+        }
         FoodData foodData = player.getFoodData();
         if (foodData.getFoodLevel() < FULL_FOOD_LEVEL && consumeItem(player, fuel)) {
             foodData.setFoodLevel(FULL_FOOD_LEVEL);
