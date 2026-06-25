@@ -21,6 +21,9 @@ public class LivingEntityHurtMixin {
     private static final float PHARAOH_UNDEAD_MULTIPLIER = 1.10F;
     private static final float MOLTEN_NETHER_MULTIPLIER = 0.90F;
 
+    private static final float THUNDER_PARALYSIS_CHANCE = 0.05F;
+    private static final int THUNDER_PARALYSIS_DURATION_TICKS = 60;
+
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void whispering$cancelImmuneDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity self = (LivingEntity) (Object) this;
@@ -30,6 +33,22 @@ public class LivingEntityHurtMixin {
         }
         if (source.is(DamageTypeTags.IS_FIRE) && AccessoryHelper.isWorn(self, AllCurios.MOLTEN_EMBLEM)) {
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "hurt", at = @At("RETURN"))
+    private void whispering$spellParalysis(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValueZ()) {
+            return;
+        }
+        LivingEntity self = (LivingEntity) (Object) this;
+        if (self.level().isClientSide() || !WPCompat.isSpellDamage(source)) {
+            return;
+        }
+        if (source.getEntity() instanceof LivingEntity attacker
+                && AccessoryHelper.isWorn(attacker, AllCurios.THUNDER_CORE)
+                && self.getRandom().nextFloat() < THUNDER_PARALYSIS_CHANCE) {
+            WPCompat.applyEffect(self, WPCompat.EFFECT_PARALYSIS, THUNDER_PARALYSIS_DURATION_TICKS, 0);
         }
     }
 

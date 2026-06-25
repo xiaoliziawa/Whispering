@@ -62,6 +62,7 @@ public class MagneticBadgeItem extends AccessoryItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.whispering.magnetic_badge.tooltip.magnet"));
+        tooltip.add(Component.translatable("item.whispering.magnetic_badge.tooltip.rune"));
         tooltip.add(Component.translatable("item.whispering.magnetic_badge.tooltip.drop"));
     }
 }

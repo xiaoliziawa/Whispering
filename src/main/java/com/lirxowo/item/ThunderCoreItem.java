@@ -24,5 +24,6 @@ public class ThunderCoreItem extends AccessoryItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.whispering.thunder_core.tooltip.reflect"));
+        tooltip.add(Component.translatable("item.whispering.thunder_core.tooltip.paralysis"));
     }
 }

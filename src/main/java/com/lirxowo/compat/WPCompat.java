@@ -121,6 +121,12 @@ public final class WPCompat {
         return source.is(type);
     }
 
+    public static boolean isSpellDamage(DamageSource source) {
+        return source.typeHolder().unwrapKey()
+                .map(key -> key.location().getNamespace().equals(SPELL_POWER))
+                .orElse(false);
+    }
+
     private static ResourceLocation alexCaves(String path) {
         return new ResourceLocation(ALEX_CAVES, path);
     }
