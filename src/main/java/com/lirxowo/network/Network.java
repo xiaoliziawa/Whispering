@@ -2,7 +2,6 @@ package com.lirxowo.network;
 
 import com.lirxowo.Whispering;
 import com.lirxowo.item.ForlornTotemItem;
-import com.lirxowo.item.PioneerCoreItem;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -19,18 +18,10 @@ public final class Network {
         throw new AssertionError("No instances");
     }
 
-    public static final ResourceLocation JETPACK_BURN = new ResourceLocation(Whispering.MOD_ID, "jetpack_burn");
     public static final ResourceLocation TOTEM_ANIMATION = new ResourceLocation(Whispering.MOD_ID, "totem_animation");
     public static final ResourceLocation FORLORN_ABILITY = new ResourceLocation(Whispering.MOD_ID, "forlorn_ability");
 
     public static void registerServerReceivers() {
-        ServerPlayNetworking.registerGlobalReceiver(JETPACK_BURN, (server, player, handler, buf, responseSender) ->
-                server.execute(() -> {
-                    if (PioneerCoreItem.isWorn(player)) {
-                        PioneerCoreItem.consumeFuel(player);
-                    }
-                }));
-
         ServerPlayNetworking.registerGlobalReceiver(FORLORN_ABILITY, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> ForlornTotemItem.activateAbility(player)));
     }

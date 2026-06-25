@@ -52,6 +52,18 @@ public final class AllCurios {
     public static final Item EARTHSHAKER_CRYSTAL = register("earthshaker_crystal",
             new EarthshakerCrystalItem(new Item.Properties().stacksTo(1)));
 
+    public static final Item SCULK_BLADE = register("sculk_blade",
+            new SculkBladeItem(new Item.Properties().stacksTo(1)));
+
+    public static final Item WATER_RUNE = register("water_rune",
+            new WaterRuneItem(new Item.Properties().stacksTo(1)));
+
+    public static final Item ABYSSAL_HEART = register("abyssal_heart",
+            new AbyssalHeartItem(new Item.Properties().stacksTo(1)));
+
+    public static final Item SOUL_GRASP_RING = register("soul_grasp_ring",
+            new SoulGraspRingItem(new Item.Properties().stacksTo(1)));
+
     public static final CreativeModeTab GENERAL_TAB = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Whispering.MOD_ID, "general"),
             FabricItemGroup.builder()
@@ -71,6 +83,10 @@ public final class AllCurios {
                         output.accept(EMBER_CORE);
                         output.accept(MAGNETIC_BADGE);
                         output.accept(EARTHSHAKER_CRYSTAL);
+                        output.accept(SCULK_BLADE);
+                        output.accept(WATER_RUNE);
+                        output.accept(ABYSSAL_HEART);
+                        output.accept(SOUL_GRASP_RING);
                     })
                     .build());
 

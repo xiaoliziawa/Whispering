@@ -24,7 +24,8 @@ public class PioneerCoreItem extends AccessoryItem {
     private static final ResourceLocation DAMAGE_MODIFIER_ID = new ResourceLocation(Whispering.MOD_ID, "pioneer_core");
     private static final double DAMAGE_BONUS = 0.10D;
 
-    public static final int FUEL_DRAIN_INTERVAL_TICKS = 240;
+    private static final int UPKEEP_INTERVAL_TICKS = 5 * 60 * 20;
+    private static final int UPKEEP_STICK_COST = 5;
 
     public PioneerCoreItem(Properties properties) {
         super(properties);
@@ -37,8 +38,12 @@ public class PioneerCoreItem extends AccessoryItem {
 
     @Override
     public void tick(ItemStack stack, SlotReference reference) {
-        if (reference.entity() instanceof Player player && !player.level().isClientSide()) {
-            WPCompat.removeEffect(player, WPCompat.EFFECT_PARALYSIS);
+        if (!(reference.entity() instanceof Player player) || player.level().isClientSide()) {
+            return;
+        }
+        WPCompat.removeEffect(player, WPCompat.EFFECT_PARALYSIS);
+        if (player.tickCount % UPKEEP_INTERVAL_TICKS == 0 && hasFuel(player)) {
+            consumeFuel(player, UPKEEP_STICK_COST);
         }
     }
 
@@ -71,15 +76,16 @@ public class PioneerCoreItem extends AccessoryItem {
         return false;
     }
 
-    public static boolean consumeFuel(Player player) {
+    public static void consumeFuel(Player player, int count) {
         Inventory inventory = player.getInventory();
-        for (int i = 0; i < inventory.getContainerSize(); i++) {
+        int remaining = count;
+        for (int i = 0; i < inventory.getContainerSize() && remaining > 0; i++) {
             ItemStack slot = inventory.getItem(i);
             if (slot.is(Items.STICK)) {
-                slot.shrink(1);
-                return true;
+                int take = Math.min(remaining, slot.getCount());
+                slot.shrink(take);
+                remaining -= take;
             }
         }
-        return false;
     }
 }

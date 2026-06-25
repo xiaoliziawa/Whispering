@@ -9,9 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -25,11 +26,13 @@ public class FurnaceCoreItem extends AccessoryItem {
     private static final ResourceLocation DAMAGE_MODIFIER_ID = new ResourceLocation(Whispering.MOD_ID, "furnace_core");
     private static final double DAMAGE_BONUS = 0.10D;
 
-    private static final int INTERVAL_TICKS = 20;
-    private static final int FUEL_CONSUME_INTERVAL_TICKS = 240;
-    private static final int BUFF_DURATION_TICKS = 60;
-    private static final int FULL_FOOD_LEVEL = 20;
-    private static final float REFILL_SATURATION = 6.0F;
+    private static final ResourceLocation KNOCKBACK_MODIFIER_ID = new ResourceLocation(Whispering.MOD_ID, "furnace_core_knockback");
+    private static final double KNOCKBACK_IMMUNITY = 1.0D;
+
+    private static final int EFFECT_INTERVAL_TICKS = 20;
+    private static final int EFFECT_DURATION_TICKS = 60;
+    private static final int EFFECT_AMPLIFIER = 1;
+    private static final int UPKEEP_INTERVAL_TICKS = 5 * 60 * 20;
 
     public FurnaceCoreItem(Properties properties) {
         super(properties);
@@ -42,9 +45,12 @@ public class FurnaceCoreItem extends AccessoryItem {
 
     @Override
     public void getDynamicModifiers(ItemStack stack, SlotReference reference, AccessoryAttributeBuilder builder) {
-        if (AccessoryHelper.BADGE_SLOT.equals(reference.slotName())) {
-            AccessoryHelper.applyAllDamageBonus(builder, DAMAGE_MODIFIER_ID, DAMAGE_BONUS);
+        if (!AccessoryHelper.BADGE_SLOT.equals(reference.slotName())) {
+            return;
         }
+        AccessoryHelper.applyAllDamageBonus(builder, DAMAGE_MODIFIER_ID, DAMAGE_BONUS);
+        builder.addStackable(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_MODIFIER_ID,
+                KNOCKBACK_IMMUNITY, AttributeModifier.Operation.ADDITION);
     }
 
     @Override
@@ -52,29 +58,24 @@ public class FurnaceCoreItem extends AccessoryItem {
         if (!(reference.entity() instanceof Player player) || player.level().isClientSide()) {
             return;
         }
-        if (player.tickCount % INTERVAL_TICKS != 0) {
-            return;
-        }
         Item fuel = WPCompat.item(WPCompat.ITEM_LAVA_POWER_CELL);
         if (fuel == null || !hasItem(player, fuel)) {
             return;
         }
-        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, BUFF_DURATION_TICKS, 1, false, true));
-        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, BUFF_DURATION_TICKS, 1, false, true));
-
-        if (player.tickCount % FUEL_CONSUME_INTERVAL_TICKS != 0) {
-            return;
+        if (player.tickCount % EFFECT_INTERVAL_TICKS == 0) {
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, EFFECT_DURATION_TICKS, EFFECT_AMPLIFIER, false, true));
+            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, EFFECT_DURATION_TICKS, EFFECT_AMPLIFIER, false, true));
+            WPCompat.applyEffect(player, WPCompat.EFFECT_NOURISHMENT, EFFECT_DURATION_TICKS, 0);
         }
-        FoodData foodData = player.getFoodData();
-        if (foodData.getFoodLevel() < FULL_FOOD_LEVEL && consumeItem(player, fuel)) {
-            foodData.setFoodLevel(FULL_FOOD_LEVEL);
-            foodData.setSaturation(REFILL_SATURATION);
+        if (player.tickCount % UPKEEP_INTERVAL_TICKS == 0) {
+            consumeItem(player, fuel);
         }
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.whispering.furnace_core.tooltip.fuel"));
+        tooltip.add(Component.translatable("item.whispering.furnace_core.tooltip.knockback"));
         tooltip.add(Component.translatable("item.whispering.furnace_core.tooltip.damage"));
     }
 
@@ -88,15 +89,14 @@ public class FurnaceCoreItem extends AccessoryItem {
         return false;
     }
 
-    private static boolean consumeItem(Player player, Item item) {
+    private static void consumeItem(Player player, Item item) {
         Inventory inventory = player.getInventory();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack slot = inventory.getItem(i);
             if (slot.is(item)) {
                 slot.shrink(1);
-                return true;
+                return;
             }
         }
-        return false;
     }
 }

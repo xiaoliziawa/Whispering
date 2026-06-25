@@ -9,5 +9,6 @@ public class WhisperingClient implements ClientModInitializer {
 		LavaHeartShieldClient.register();
 		MoltenEmblemClient.register();
 		ForlornTotemClient.register();
+		WaterRuneClient.register();
 	}
 }

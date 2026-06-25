@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
@@ -33,6 +34,7 @@ public final class WPCompat {
     public static final String ALEX_CAVES_DIMENSIONS = "alex_caves_dimensions";
     public static final String CHAMPIONS = "champions";
     public static final String CATACLYSM = "cataclysm";
+    public static final String FARMERS_DELIGHT = "farmersdelight";
 
     public static final ResourceLocation DIM_FORLORN_HOLLOWS = dimensions("forlorn_hollows");
     public static final ResourceLocation DIM_CANDY_CAVITY = dimensions("candy_cavity");
@@ -46,17 +48,21 @@ public final class WPCompat {
 
     public static final ResourceLocation EFFECT_PARALYSIS = champions("paralysis");
     public static final ResourceLocation EFFECT_STUN = cataclysm("stun");
+    public static final ResourceLocation EFFECT_NOURISHMENT = farmersDelight("nourishment");
 
     public static final ResourceLocation ITEM_LAVA_POWER_CELL = cataclysm("lava_power_cell");
 
     public static final ResourceKey<DamageType> DAMAGE_REFLECTION =
             ResourceKey.create(Registries.DAMAGE_TYPE, champions("reflection"));
 
+    public static final TagKey<DamageType> SPELL_DAMAGE =
+            TagKey.create(Registries.DAMAGE_TYPE, spellPower("all"));
+
     public static final String SPELL_POWER = "spell_power";
     public static final String RANGED_WEAPON = "ranged_weapon";
 
     /**
-     * 「全伤害类型」属性集合：spell_power 本体实际注册的六系（arcane/fire/frost/healing/lightning/soul）
+     *  全伤害类型 属性集合：spell_power 本体实际注册的六系（arcane/fire/frost/healing/lightning/soul）
      * + 远程武器伤害 + 原版近战伤害。
      * air/earth/water 为附属模组可能注册的额外学派，本体不存在时 attribute() 返回 null 自动跳过。
      */
@@ -72,6 +78,17 @@ public final class WPCompat {
             spellPower("water"),
             new ResourceLocation(RANGED_WEAPON, "damage"),
             new ResourceLocation("minecraft", "generic.attack_damage"));
+
+    /**
+     * 六大法术学派伤害属性，spell_power 本体注册。用于 全法术属性 加成。
+     */
+    public static final List<ResourceLocation> SPELL_SCHOOL_ATTRIBUTES = List.of(
+            spellPower("arcane"),
+            spellPower("fire"),
+            spellPower("frost"),
+            spellPower("healing"),
+            spellPower("lightning"),
+            spellPower("soul"));
 
     private static final Map<ResourceLocation, Optional<MobEffect>> EFFECT_CACHE = new ConcurrentHashMap<>();
     private static final Map<ResourceLocation, Optional<Item>> ITEM_CACHE = new ConcurrentHashMap<>();
@@ -122,9 +139,7 @@ public final class WPCompat {
     }
 
     public static boolean isSpellDamage(DamageSource source) {
-        return source.typeHolder().unwrapKey()
-                .map(key -> key.location().getNamespace().equals(SPELL_POWER))
-                .orElse(false);
+        return source.is(SPELL_DAMAGE);
     }
 
     private static ResourceLocation alexCaves(String path) {
@@ -141,6 +156,10 @@ public final class WPCompat {
 
     private static ResourceLocation cataclysm(String path) {
         return new ResourceLocation(CATACLYSM, path);
+    }
+
+    private static ResourceLocation farmersDelight(String path) {
+        return new ResourceLocation(FARMERS_DELIGHT, path);
     }
 
     private static ResourceLocation spellPower(String path) {

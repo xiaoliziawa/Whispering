@@ -1,10 +1,7 @@
 package com.lirxowo.client;
 
 import com.lirxowo.item.PioneerCoreItem;
-import com.lirxowo.network.Network;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -51,9 +48,5 @@ public final class PioneerCoreClient {
 
         player.setDeltaMovement(horizontalX, verticalSpeed, horizontalZ);
         player.fallDistance = 0.0F;
-
-        if (player.tickCount % PioneerCoreItem.FUEL_DRAIN_INTERVAL_TICKS == 0) {
-            ClientPlayNetworking.send(Network.JETPACK_BURN, PacketByteBufs.empty());
-        }
     }
 }

@@ -14,6 +14,7 @@ public final class AccessoryHelper {
     public static final String BADGE_SLOT = "whispering_badge";
     public static final String NECKLACE_SLOT = "necklace";
     public static final String BACK_SLOT = "back";
+    public static final String RING_SLOT = "ring";
 
     public static boolean isWorn(LivingEntity entity, Item item) {
         AccessoriesCapability capability = AccessoriesCapability.get(entity);

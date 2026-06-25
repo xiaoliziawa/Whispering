@@ -1,9 +1,12 @@
 package com.lirxowo.event;
 
 import com.lirxowo.compat.WPCompat;
+import com.lirxowo.item.AbyssalHeartItem;
 import com.lirxowo.item.AccessoryHelper;
 import com.lirxowo.item.reg.AllCurios;
 import com.lirxowo.item.PharaohNecklaceItem;
+import com.lirxowo.item.SculkBladeItem;
+import com.lirxowo.item.SoulGraspRingItem;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -52,6 +55,25 @@ public final class WPEvents {
         handlePharaohDrop(entity, player);
         handleEnvironmentDrops(entity, player);
         handleRuneDrop(entity, player);
+        handleSculkBladeHeal(player);
+        handleSoulGraspDrop(entity, player);
+        AbyssalHeartItem.onKill(player);
+    }
+
+    private static void handleSoulGraspDrop(LivingEntity entity, Player player) {
+        if (entity.getMobType() != MobType.UNDEAD) {
+            return;
+        }
+        if (AccessoryHelper.isWorn(player, AllCurios.SOUL_GRASP_RING)
+                && player.getRandom().nextFloat() < SoulGraspRingItem.STICK_DROP_CHANCE) {
+            entity.spawnAtLocation(Items.STICK);
+        }
+    }
+
+    private static void handleSculkBladeHeal(Player player) {
+        if (AccessoryHelper.isWorn(player, AllCurios.SCULK_BLADE)) {
+            player.heal(player.getMaxHealth() * SculkBladeItem.KILL_HEAL_FRACTION);
+        }
     }
 
     private static void handleRuneDrop(LivingEntity entity, Player player) {

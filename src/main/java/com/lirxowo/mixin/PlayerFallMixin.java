@@ -1,6 +1,7 @@
 package com.lirxowo.mixin;
 
 import com.lirxowo.item.PioneerCoreItem;
+import com.lirxowo.item.WaterRuneItem;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +14,8 @@ public class PlayerFallMixin {
 
     @Inject(method = "causeFallDamage", at = @At("HEAD"), cancellable = true)
     private void whispering$noJetpackFallDamage(float fallDistance, float multiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if (PioneerCoreItem.isWorn((Player) (Object) this)) {
+        Player self = (Player) (Object) this;
+        if (PioneerCoreItem.isWorn(self) || WaterRuneItem.isWorn(self)) {
             cir.setReturnValue(false);
         }
     }
